@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements Callbcak {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.progress_circular);
 
-        MobileAds.initialize(this, "ca-app-pub-5976177697973460~3342740919");
+        MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
     }
 
     @Override

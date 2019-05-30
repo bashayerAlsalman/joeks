@@ -7,10 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.CountDownLatch;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 
@@ -22,22 +19,15 @@ public class JokeTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void testAsyncTask() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-
+    public void testAsyncTask() {
         EndpointAsyncTask asyncTask = new EndpointAsyncTask(activityRule.getActivity()) {
             @Override
             protected void onPostExecute(String result) {
-                assertNotNull(result);
-                if (result != null) {
-                    assertTrue(result.length() > 0);
-                    latch.countDown();
-                }
+                assertNotNull("joke is null: ", result);
+                assertTrue("joke is empty: ", !result.isEmpty());
             }
         };
-
         asyncTask.execute();
-        latch.await();
     }
 
 }
