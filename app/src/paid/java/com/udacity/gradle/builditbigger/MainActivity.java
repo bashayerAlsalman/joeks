@@ -1,25 +1,36 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
-import Joke.Library;
+import net.bashayer.androidlibrary.JokeDisplayActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+import static net.bashayer.androidlibrary.JokeDisplayActivity.KEY;
 
-    private Library joke= new Library();
+
+public class MainActivity extends AppCompatActivity implements Callbcak {
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar = findViewById(R.id.progress_circular);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,8 +55,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        Toast.makeText(this, joke.getJoke(), Toast.LENGTH_SHORT).show();
+        showIndicator(true);
+        new EndpointAsyncTask(this).execute();
     }
 
+    private void showIndicator(boolean showIndicator) {
+        if (showIndicator) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showJokes(String joke) {
+        showIndicator(false);
+        Intent intent = new Intent(this, JokeDisplayActivity.class);
+        intent.putExtra(KEY, joke);
+        startActivity(intent);
+    }
 
 }
